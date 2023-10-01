@@ -113,7 +113,12 @@ public class TransformImageUtil {
                     String fieldName = fieldCell.getStringCellValue().trim();
                     if (fieldName.contains("image_url")) {
                         Cell cell = fieldRow.getCell(j);
-                        cell.setCellValue(productAmz.getValueForCell(fieldName));
+                        if (cell != null) {
+                            String value = productAmz.getValueForCell(fieldName);
+                            if (value != null) {
+                                cell.setCellValue(value);
+                            }
+                        }
                     }
                 }
 
@@ -125,7 +130,7 @@ public class TransformImageUtil {
             
             FileOutputStream fileOut = null;
             try {
-                fileOut = new FileOutputStream(localImageFolder + name + "_new.xlsx");
+                fileOut = new FileOutputStream(parent + "/" + name + "_new.xlsx");
                 workbook.write(fileOut);
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(ExcelUtils.class.getName()).log(Level.SEVERE, null, ex);
