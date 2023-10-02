@@ -21,8 +21,6 @@ import com.utils.EncryptUtil;
 import com.utils.OSUtil;
 import com.view.AboutPannel;
 import com.view.BasePanel;
-import com.view.ClientHomePanel;
-import com.view.SettingPannel;
 import com.utils.CheckingDataUtil;
 import com.utils.ComputerIdentifier;
 import com.utils.PhantomJsManager;
@@ -144,11 +142,9 @@ public class TestClientApp {
 
 //        ClientHomePanel mainHomePanel = new ClientHomePanel();
         ClientTestPanel mainHomePanel = new ClientTestPanel();
-        SettingPannel settingPannel = new SettingPannel();
         AboutPannel aboutPannel = new AboutPannel();
 
         listPanel.add(mainHomePanel);
-        listPanel.add(settingPannel);
         listPanel.add(aboutPannel);
 
         JMenuBar mb = new JMenuBar();
@@ -158,8 +154,6 @@ public class TestClientApp {
 
 //        JMenuItem menuItem = createMenuItem(mainHomePanel);
 //        menu.add(menuItem);
-        JMenuItem settingMenuItem = createMenuItem(settingPannel);
-        menu.add(settingMenuItem);
 
         JMenuItem jItem = new JMenuItem("Exit");
         jItem.setActionCommand("exit");
@@ -169,7 +163,6 @@ public class TestClientApp {
         helpMenu.add(aboutMenuItem);
 
 //        menuItem.addActionListener(actionListener);
-        settingMenuItem.addActionListener(actionListener);
         aboutMenuItem.addActionListener(actionListener);
         jItem.addActionListener(actionListener);
 

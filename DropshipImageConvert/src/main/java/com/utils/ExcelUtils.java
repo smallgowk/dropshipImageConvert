@@ -1164,52 +1164,52 @@ public class ExcelUtils {
         }
     }
 
-    public static void readCustomValue() throws FileNotFoundException, IOException {
-        FileInputStream fis = new FileInputStream(Configs.excelCustomValueFilePath);
-
-        /* CreationHelper helps us create instances of various things like DataFormat,
-        Hyperlink, RichTextString etc, in a format (HSSF, XSSF) independent way */
-        try (Workbook workbook = WorkbookFactory.create(fis)) {
-
-            /* CreationHelper helps us create instances of various things like DataFormat,
-            Hyperlink, RichTextString etc, in a format (HSSF, XSSF) independent way */
-            CreationHelper createHelper = workbook.getCreationHelper();
-            //        Sheet btgSheet = workbook.createSheet("Employee");
-
-            Sheet sheet = null;
-            Iterator<Sheet> sheetIterator = workbook.sheetIterator();
-            while (sheetIterator.hasNext()) {
-                Sheet sh = sheetIterator.next();
-
-                if (sh.getSheetName().equals("data")) {
-                    sheet = sh;
-                    break;
-                }
-            }
-            if (sheet == null) {
-                return;
-            }   // Create a Sheet
-
-            int i = 1;
-            Row fieldRow = sheet.getRow(i);
-
-            while (fieldRow != null) {
-                DataFormatter formatter = new DataFormatter();
-                
-                String fieldName = formatter.formatCellValue(fieldRow.getCell(0));
-                String value = formatter.formatCellValue(fieldRow.getCell(1));
-                
-                if (!StringUtils.isEmpty(fieldName) && !StringUtils.isEmpty(value)) {
-                    Configs.hashCustomValue.put(fieldName.trim(), value.trim());
-                }
-                i++;
-                fieldRow = sheet.getRow(i);
-            }
-
-            fis.close();
-            workbook.close();
-        }
-    }
+//    public static void readCustomValue() throws FileNotFoundException, IOException {
+//        FileInputStream fis = new FileInputStream(Configs.excelCustomValueFilePath);
+//
+//        /* CreationHelper helps us create instances of various things like DataFormat,
+//        Hyperlink, RichTextString etc, in a format (HSSF, XSSF) independent way */
+//        try (Workbook workbook = WorkbookFactory.create(fis)) {
+//
+//            /* CreationHelper helps us create instances of various things like DataFormat,
+//            Hyperlink, RichTextString etc, in a format (HSSF, XSSF) independent way */
+//            CreationHelper createHelper = workbook.getCreationHelper();
+//            //        Sheet btgSheet = workbook.createSheet("Employee");
+//
+//            Sheet sheet = null;
+//            Iterator<Sheet> sheetIterator = workbook.sheetIterator();
+//            while (sheetIterator.hasNext()) {
+//                Sheet sh = sheetIterator.next();
+//
+//                if (sh.getSheetName().equals("data")) {
+//                    sheet = sh;
+//                    break;
+//                }
+//            }
+//            if (sheet == null) {
+//                return;
+//            }   // Create a Sheet
+//
+//            int i = 1;
+//            Row fieldRow = sheet.getRow(i);
+//
+//            while (fieldRow != null) {
+//                DataFormatter formatter = new DataFormatter();
+//                
+//                String fieldName = formatter.formatCellValue(fieldRow.getCell(0));
+//                String value = formatter.formatCellValue(fieldRow.getCell(1));
+//                
+//                if (!StringUtils.isEmpty(fieldName) && !StringUtils.isEmpty(value)) {
+//                    Configs.hashCustomValue.put(fieldName.trim(), value.trim());
+//                }
+//                i++;
+//                fieldRow = sheet.getRow(i);
+//            }
+//
+//            fis.close();
+//            workbook.close();
+//        }
+//    }
     
     public static void saveErrorProducts(String filePath, ArrayList<TransformResponse> listErrorProducts) throws FileNotFoundException, IOException {
 

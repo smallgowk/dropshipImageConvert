@@ -11,7 +11,6 @@ import com.config.ClientInfo;
 import com.google.gson.Gson;
 import com.api.dropship.DropApiCall;
 import com.api.dropship.req.UpdateClientConfigReq;
-import com.config.Configs;
 import static com.config.Configs.downloadUrl;
 import com.controller.DownloadManager;
 import com.models.response.ResponseObj;
@@ -22,12 +21,10 @@ import com.utils.OSUtil;
 import com.view.AboutPannel;
 import com.view.BasePanel;
 import com.view.ClientHomePanel;
-import com.view.SettingPannel;
 import com.utils.CheckingDataUtil;
 import com.utils.ComputerIdentifier;
 import com.utils.PhantomJsManager;
 import com.utils.StringUtils;
-import com.view.ClientTestPanel;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,8 +37,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
@@ -143,12 +138,9 @@ public class StartClientApp {
         OSUtil.setAppTitle(jFrame);
 
         ClientHomePanel mainHomePanel = new ClientHomePanel();
-//        ClientTestPanel mainHomePanel = new ClientTestPanel();
-        SettingPannel settingPannel = new SettingPannel();
         AboutPannel aboutPannel = new AboutPannel();
 
         listPanel.add(mainHomePanel);
-        listPanel.add(settingPannel);
         listPanel.add(aboutPannel);
 
 //        JMenuBar mb = new JMenuBar();

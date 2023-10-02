@@ -34,11 +34,7 @@ public class ProcessPageDataSvs {
     }
     
     public static void processPageData(ArrayList<ProductAmz> listProducts, AliexStoreInfo aliexStoreInfo, String fileName, boolean isSaveAll) {
-        try {
-            ExcelUtils.saveListProductsToExcel(listProducts, fileName, Configs.excelSampleFilePath, aliexStoreInfo, isSaveAll);
-        } catch (EncryptedDocumentException | InvalidFormatException | IOException ex) {
-            Logger.getLogger(ProcessPageDataSvs.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }
     
     public static void processPageErrorData(ArrayList<TransformResponse> listErrorProducts, AliexStoreInfo aliexStoreInfo, int pageIndex) {

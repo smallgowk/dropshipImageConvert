@@ -1024,7 +1024,7 @@ public class ProcessStoreInfoSvs {
                 if (!isChildProcessing) {
                     parentCount ++;
                 }
-                if (productCount == size - 1 || (rowCount >= Configs.maxRow && !isChildProcessing)) {
+                if (productCount == size - 1 || (!isChildProcessing)) {
                     String fileName = null;
                     System.out.println("processPageInfo " + productCount + "/" + size + " " + partCount);
                     if (productCount == size - 1 && partCount == 0) {
@@ -1062,76 +1062,14 @@ public class ProcessStoreInfoSvs {
     }
 
     public String genExcelFileNameWithPage(AliexStoreInfo aliexStoreInfo, int pageIndex, int indexPart) {
-        if (pageIndex == 0) {
-            pageIndex = 1;
-        }
-
-        File file = new File(Configs.PRODUCT_DATA_PATH + aliexStoreInfo.accNo);
-
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        file = new File(file.getPath() + Configs.pathChar + "Aliex");
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        file = new File(file.getPath() + Configs.pathChar + aliexStoreInfo.storeSign);
-
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        return file.getPath() + Configs.pathChar + aliexStoreInfo.accNo + "_" + aliexStoreInfo.storeSign + "_page" + pageIndex + "_" + indexPart + ".xlsx";
-
+        return "";
     }
     
     public String genExcelFileNameWithPage(AliexStoreInfo aliexStoreInfo, int pageIndex) {
-        if (pageIndex == 0) {
-            pageIndex = 1;
-        }
-
-        File file = new File(Configs.PRODUCT_DATA_PATH + aliexStoreInfo.accNo);
-
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        file = new File(file.getPath() + Configs.pathChar + "Aliex");
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        file = new File(file.getPath() + Configs.pathChar + aliexStoreInfo.storeSign);
-
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        return file.getPath() + Configs.pathChar + aliexStoreInfo.accNo + "_" + aliexStoreInfo.storeSign + "_page" + pageIndex + ".xlsx";
-
+        return "";
     }
     
     public String genExcelFileNameForStore(AliexStoreInfo aliexStoreInfo) {
-        File file = new File(Configs.PRODUCT_DATA_PATH + aliexStoreInfo.accNo);
-
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        file = new File(file.getPath() + Configs.pathChar + "Aliex");
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        file = new File(file.getPath() + Configs.pathChar + aliexStoreInfo.storeSign);
-
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        return file.getPath() + Configs.pathChar + aliexStoreInfo.accNo + "_" + aliexStoreInfo.storeSign + ".xlsx";
-
+        return "";
     }
 }

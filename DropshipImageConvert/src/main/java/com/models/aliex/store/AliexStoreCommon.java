@@ -982,31 +982,7 @@ public class AliexStoreCommon {
     }
 
     public String genExcelFileNameWithPage(int pageIndex) {
-        if (pageIndex == 0) {
-            pageIndex = 1;
-        }
-
-        File file = new File(Configs.PRODUCT_DATA_PATH + accNo);
-
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        file = new File(file.getPath() + Configs.pathChar + "Aliex");
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        String folder = getCacheFile();
-
-        file = new File(file.getPath() + Configs.pathChar + folder);
-
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        return file.getPath() + Configs.pathChar + accNo + "_" + folder + "_page" + pageIndex + ".xlsx";
-
+        return "";
     }
     
     

@@ -6,7 +6,6 @@
 package com.controller.crawl.machine;
 
 import com.config.Configs;
-import static com.config.Configs.CACHE_PATH;
 import com.interfaces.CrawlPageInterface;
 import com.run.StartClientApp;
 import com.controller.crawl.aliex.AliexCrawlSvs;
@@ -293,15 +292,10 @@ public class CrawlerMachine {
     }
 
     public boolean isHasCookies() {
-        File file = new File(Configs.COOKIE_PATH);
-        return file.exists() && !(file.length() == 0);
+        return false;
     }
 
     public void clearCache() {
-        File file = new File(Configs.COOKIE_PATH);
-        if (file.exists()) {
-            file.delete();
-        }
     }
 
     public void refreshCookies() {
@@ -399,8 +393,7 @@ public class CrawlerMachine {
                     .header("Content-Type", "text/html; charset=utf-8")
                     .header("Accept", "text/html,text/plain,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8")
                     .header("Accept-Language", "*")
-                    .header("Accept-Encoding", "gzip, deflate, br")
-                    .cookies(CookieUtil.getCookiesFromCache(String.valueOf(CACHE_PATH + cookieName)));
+                    .header("Accept-Encoding", "gzip, deflate, br");
 //            Thread.sleep(500);
             doc = connection.get();
             return doc;

@@ -5,24 +5,17 @@
  */
 package com.view;
 
-import com.api.dropship.DropApiCall;
 import com.config.Configs;
-import static com.config.Configs.CACHE_PATH;
-import static com.config.Configs.COOKIE_PATH;
 import com.interfaces.ActionListener;
 import com.interfaces.CrawlProcessListener;
 import com.controller.MainController;
 import com.models.aliex.store.BaseStoreInfo;
 import com.models.aliex.store.inputdata.BaseStoreOrderInfo;
-import com.models.aliex.store.inputdata.SnakeBaseStoreOrderInfo;
-import com.controller.thread.SendInfoThread;
 import com.controller.TestController;
 import com.interfaces.DownloadListener;
 import com.controller.DownloadManager;
 import com.controller.crawl.aliex.AliexCrawlSvs;
-import com.controller.inputprocess.SnakeReadOrderInfoSvs;
 import com.models.response.ResponseObj;
-import com.utils.Constants;
 import com.utils.CookieUtil;
 import com.utils.DialogUtil;
 import com.utils.PhantomJsManager;
@@ -30,7 +23,6 @@ import com.utils.StringUtils;
 import com.utils.WindowsShortcut;
 import java.awt.Dimension;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.logging.Level;
@@ -689,14 +681,7 @@ public class ClientTestPanel extends BasePanel {
     }//GEN-LAST:event_jButtonSaveCookiesActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String type = jTextFieldLanguage.getText();
-        if (type.isEmpty()) {
-            type = "us";
-        }
-        String cookieFile = String.valueOf(CACHE_PATH + type + ".txt");
-        Map<String, String> cookies = CookieUtil.getCookiesFromCache(cookieFile);
-        AliexCrawlSvs.getInstance().addCookies(cookies);
-        AliexCrawlSvs.getInstance().goToPage(txtStoreFilePath.getText());
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

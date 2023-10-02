@@ -35,23 +35,7 @@ public class BTGManager {
     public HashMap<String, String> hashMapBTGSub = new HashMap<>();
     
     public void initBTG() {
-        try {
-            File file = new File(Configs.CONFIG_FOLDER_BTG_PATH);
-            if(!file.exists()) {
-                return;
-            }
-            String[] btgfiles = file.list();
-            for(String s : btgfiles) {
-                String fileName = s.substring(0, s.indexOf(".xls"));
-                String[] fileParts = fileName.split("-");
-                
-                ExcelUtils.getBTGFromExcel(s, fileParts[0] + ".xlsx", hashMapBTG, hashMapBTGSub);
-            }
         
-        
-        } catch (IOException | InvalidFormatException ex) {
-            Logger.getLogger(BTGManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     public BTGNode getBTGNode(String nodeName) {

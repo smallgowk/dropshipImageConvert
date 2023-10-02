@@ -33,8 +33,7 @@ public class AliexOriginalInfo {
     }
 
     public float getProductPrice() {
-       float promotionRate = getPromotionRate();
-       return (detail.getProductPrice() * (1- promotionRate) + getShippingPrice()) * (Configs.priceRate - promotionRate);
+       return -1;
     }
     
     public float getPromotionRate() {

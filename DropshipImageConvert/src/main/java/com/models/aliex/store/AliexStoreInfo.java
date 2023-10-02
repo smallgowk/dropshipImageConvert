@@ -99,44 +99,11 @@ public class AliexStoreInfo extends BaseStoreInfo{
     }
     
     public String genExcelFileNameWithPage(int pageIndex, boolean isError) {
-        if (pageIndex == 0) {
-            pageIndex = 1;
-        }
-
-        File file = new File(Configs.PRODUCT_DATA_PATH + accNo);
-
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        file = new File(file.getPath() + Configs.pathChar + "Aliex");
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        file = new File(file.getPath() + Configs.pathChar + storeSign);
-
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        return file.getPath() + Configs.pathChar + accNo + "_" + storeSign + (isError ? "_error" : "") + "_page" + pageIndex + ".xlsx";
+        return "";
     }
     
     public String getLocalImageFolder() {
-        File file = new File(Configs.IMAGE_DATA_PATH + accNo + Configs.pathChar + storeSign);
-        if (file.exists()) {
-            return file.getPath() + Configs.pathChar;
-        }
-        file = new File(Configs.IMAGE_DATA_PATH + accNo);
-        if (!file.exists()) {
-            file.mkdir();
-        }
-        file = new File(file.getPath() + Configs.pathChar + storeSign);
-        if (!file.exists()) {
-            file.mkdir();
-        }
-        return file.getPath() + Configs.pathChar;
+        return "";
     }
     
     public String getImageVpsFolder() {
@@ -144,59 +111,14 @@ public class AliexStoreInfo extends BaseStoreInfo{
     }
     
     public String genExcelFileNameForStore(boolean isError) {
-        File file = new File(Configs.PRODUCT_DATA_PATH + accNo);
-
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        file = new File(file.getPath() + Configs.pathChar + (isError ? "Errors" : "Aliex"));
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        file = new File(file.getPath() + Configs.pathChar + storeSign);
-
-        if (!file.exists()) {
-            file.mkdir();
-        }
-        return file.getPath() + Configs.pathChar + accNo + "_" + storeSign + ".xlsx";
+        return "";
     }
     
     public String getFolderPath() {
-        File file = new File(Configs.PRODUCT_DATA_PATH + accNo);
-
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        file = new File(file.getPath() + Configs.pathChar + "Aliex");
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        file = new File(file.getPath() + Configs.pathChar + storeSign);
-
-        if (!file.exists()) {
-            file.mkdir();
-        }
-        
-        return file.getPath();
+        return "";
     }
     
     public String getStoreFolderPath() {
-        File file = new File(Configs.PRODUCT_DATA_PATH + accNo);
-
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        file = new File(file.getPath() + Configs.pathChar + "Aliex");
-        if (!file.exists()) {
-            file.mkdir();
-        }
-
-        return file.getPath();
+        return "";
     }
-    
 }

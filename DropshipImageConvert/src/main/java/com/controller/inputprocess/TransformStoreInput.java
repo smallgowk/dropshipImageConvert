@@ -49,8 +49,6 @@ public class TransformStoreInput {
         aliexStoreInfo.setReasons(snakeStoreOrderInfo.getReasons());
 
         aliexStoreInfo.setIsOnlyUS(Configs.isOnlyUS);
-        aliexStoreInfo.setPriceLimit(Configs.priceLimit);
-        aliexStoreInfo.setPriceRate(Configs.priceRate);
         aliexStoreInfo.setDataSaveType(Configs.dataSaveType);
 //        aliexStoreInfo.setDataLv(Configs.dataLevel);
 
