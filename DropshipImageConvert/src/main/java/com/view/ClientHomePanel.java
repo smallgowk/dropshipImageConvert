@@ -6,7 +6,6 @@
 package com.view;
 
 import com.api.RestBase;
-import com.api.dropship.DropApiCall;
 import com.api.dropship.DropUrlFactory;
 import com.config.Configs;
 import static com.config.Configs.downloadUrl;
@@ -17,7 +16,6 @@ import com.controller.DownloadManager;
 import com.controller.transform.TransformToServer;
 import com.models.outcome.BaseObj;
 import com.models.response.ResponseObj;
-import com.models.response.TransformResponse;
 import com.utils.Constants;
 import com.utils.DialogUtil;
 import com.utils.StringUtils;
@@ -61,7 +59,6 @@ public class ClientHomePanel extends BasePanel {
         txtVpsIp.setText("" + Configs.vpsIp);
         txtFilePath.setText("" + Configs.filePath);
 
-        btnStop.setEnabled(false);
         DownloadManager.getInstance().setListener(downloadListener);
         updateDownloadState();
     }
@@ -82,7 +79,6 @@ public class ClientHomePanel extends BasePanel {
         btnBrowseProfile = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         btnStartCrawl = new javax.swing.JButton();
-        btnStop = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         lblDownloadState = new javax.swing.JLabel();
         btnBrowseProfile1 = new javax.swing.JButton();
@@ -111,13 +107,6 @@ public class ClientHomePanel extends BasePanel {
         btnStartCrawl.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnStartCrawlActionPerformed(evt);
-            }
-        });
-
-        btnStop.setText("Stop");
-        btnStop.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnStopActionPerformed(evt);
             }
         });
 
@@ -154,9 +143,7 @@ public class ClientHomePanel extends BasePanel {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(lblDownloadState, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnStop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnBrowseProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(btnBrowseProfile))
                             .addComponent(lblProcessing, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -165,9 +152,7 @@ public class ClientHomePanel extends BasePanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnStop)
-                    .addComponent(btnStartCrawl))
+                .addComponent(btnStartCrawl)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -327,12 +312,6 @@ public class ClientHomePanel extends BasePanel {
 
 
 
-    private void btnStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopActionPerformed
-        // TODO add your handling code here:
-        btnStartCrawl.setText("Start");
-        btnStop.setEnabled(false);
-    }//GEN-LAST:event_btnStopActionPerformed
-
     private void btnBrowseProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseProfileActionPerformed
         // TODO add your handling code here:
         choosertitle = "Select file:";
@@ -369,7 +348,6 @@ public class ClientHomePanel extends BasePanel {
     private javax.swing.JButton btnBrowseProfile;
     private javax.swing.JButton btnBrowseProfile1;
     private javax.swing.JButton btnStartCrawl;
-    private javax.swing.JButton btnStop;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

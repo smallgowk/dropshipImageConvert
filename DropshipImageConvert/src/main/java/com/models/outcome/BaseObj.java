@@ -15,6 +15,7 @@ public class BaseObj {
     private String diskSerialNumber;
     private String computerName;
     private String clientMessage;
+    private String module;
 
     public String getAction() {
         return action;
@@ -56,5 +57,11 @@ public class BaseObj {
         this.clientMessage = clientMessage;
     }
 
-    
+    public String getModule() {
+        return module;
+    }
+
+    public void setModule(String module) {
+        this.module = module;
+    }
 }

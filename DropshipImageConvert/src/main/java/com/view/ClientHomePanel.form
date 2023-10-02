@@ -65,10 +65,7 @@
                                       </Group>
                                   </Group>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="btnStop" max="32767" attributes="0"/>
-                                      <Component id="btnBrowseProfile" max="32767" attributes="0"/>
-                                  </Group>
+                                  <Component id="btnBrowseProfile" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Component id="lblProcessing" alignment="0" min="-2" pref="79" max="-2" attributes="0"/>
                           </Group>
@@ -83,10 +80,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btnStop" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="btnStartCrawl" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="btnStartCrawl" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -145,14 +139,6 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnStartCrawlActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="btnStop">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Stop"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnStopActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">

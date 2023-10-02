@@ -74,6 +74,7 @@ public class TransformToServer {
         BaseObj baseObj = new BaseObj();
         initComputerInfo(baseObj);
         baseObj.setAction(Constants.TCPAction.GET_ACCOUNT);
+        baseObj.setModule("PLImageTool");
         return baseObj;
     }
     
