@@ -206,9 +206,9 @@ public class Configs {
         loadAllConfigs();
         
 //        com.pong.config.Configs.init();
-        AWSUtil.init();
+//        AWSUtil.init();
         
-        BTGManager.getInstance().initBTG();
+//        BTGManager.getInstance().initBTG();
 
     }
 
