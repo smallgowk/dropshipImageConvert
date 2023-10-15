@@ -17,6 +17,7 @@ import com.models.aliex.VariationProperty;
 import com.models.aliex.crawl.ItemSpecifics;
 import com.models.aliex.store.AliexStoreInfo;
 import com.controller.DownloadManager;
+import com.controller.ImgurManager;
 import com.controller.transform.ProcessTransformAliexToAmz;
 import com.models.request.ImagePathModel;
 import com.models.response.TransformCrawlResponse;
@@ -2518,40 +2519,33 @@ public class ProductAmz {
 
     }
     
-    public void updateImageUrl(String vpsFolderPath) {
-        updateImageUrl(vpsFolderPath, "main_image_url");
-        updateImageUrl(vpsFolderPath, "swatch_image_url");
-        updateImageUrl(vpsFolderPath, "other_image_url1");
-        updateImageUrl(vpsFolderPath, "other_image_url2");
-        updateImageUrl(vpsFolderPath, "other_image_url3");
-        updateImageUrl(vpsFolderPath, "other_image_url4");
-        updateImageUrl(vpsFolderPath, "other_image_url5");
-        updateImageUrl(vpsFolderPath, "other_image_url6");
-        updateImageUrl(vpsFolderPath, "other_image_url7");
-        updateImageUrl(vpsFolderPath, "other_image_url8");
-//        main_image_key = !StringUtils.isEmpty(main_image_url) ? "" + Math.abs(main_image_url.hashCode()) : null;
-//        swatch_image_key = !StringUtils.isEmpty(swatch_image_url) ? "" + Math.abs(swatch_image_url.hashCode()) : null;
-//        other1_image_key = !StringUtils.isEmpty(other_image_url1) ? "" + Math.abs(other_image_url1.hashCode()) : null;
-//        other2_image_key = !StringUtils.isEmpty(other_image_url2) ? "" + Math.abs(other_image_url2.hashCode()) : null;
-//        other3_image_key = !StringUtils.isEmpty(other_image_url3) ? "" + Math.abs(other_image_url3.hashCode()) : null;
-//        other4_image_key = !StringUtils.isEmpty(other_image_url4) ? "" + Math.abs(other_image_url4.hashCode()) : null;
-//        other5_image_key = !StringUtils.isEmpty(other_image_url5) ? "" + Math.abs(other_image_url5.hashCode()) : null;
-//        other6_image_key = !StringUtils.isEmpty(other_image_url6) ? "" + Math.abs(other_image_url6.hashCode()) : null;
-//        other7_image_key = !StringUtils.isEmpty(other_image_url7) ? "" + Math.abs(other_image_url7.hashCode()) : null;
-//        other8_image_key = !StringUtils.isEmpty(other_image_url8) ? "" + Math.abs(other_image_url8.hashCode()) : null;
-        
-//        main_image_vps_name = DownloadManager.getInstance().getFileName(main_image_key);
-//        if (StringUtils.isEmpty(main_image_vps_name)) {
-//            DownloadManager.getInstance().put(main_image_key, main_image_url);
-//            main_image_vps_name = item_sku + "_" + main_image_key + ".jpg";
-//            DownloadManager.getInstance().putMapFileName(main_image_key, main_image_vps_name);
-//        }
-//        main_image_url = vpsFolderPath + main_image_vps_name;
-//        DataStore.putProductData(item_sku, "main_image_url", main_image_url);
-        
+    public void updateImageUrlVps(String vpsFolderPath) {
+        updateImageUrlVps(vpsFolderPath, "main_image_url");
+        updateImageUrlVps(vpsFolderPath, "swatch_image_url");
+        updateImageUrlVps(vpsFolderPath, "other_image_url1");
+        updateImageUrlVps(vpsFolderPath, "other_image_url2");
+        updateImageUrlVps(vpsFolderPath, "other_image_url3");
+        updateImageUrlVps(vpsFolderPath, "other_image_url4");
+        updateImageUrlVps(vpsFolderPath, "other_image_url5");
+        updateImageUrlVps(vpsFolderPath, "other_image_url6");
+        updateImageUrlVps(vpsFolderPath, "other_image_url7");
+        updateImageUrlVps(vpsFolderPath, "other_image_url8");
     }
     
-    public void updateImageUrl(String vpsFolderPath, String fieldName) {
+    public void updateImageUrlImgUr() {
+        updateImageUrlImgUr("main_image_url");
+        updateImageUrlImgUr("swatch_image_url");
+        updateImageUrlImgUr("other_image_url1");
+        updateImageUrlImgUr("other_image_url2");
+        updateImageUrlImgUr("other_image_url3");
+        updateImageUrlImgUr("other_image_url4");
+        updateImageUrlImgUr("other_image_url5");
+        updateImageUrlImgUr("other_image_url6");
+        updateImageUrlImgUr("other_image_url7");
+        updateImageUrlImgUr("other_image_url8");
+    }
+    
+    public void updateImageUrlVps(String vpsFolderPath, String fieldName) {
         String[] fieldParts = fieldName.split(Pattern.quote("_url"));
         String tail = fieldParts.length > 1 ? fieldParts[1] : "";
         String keyFieldName = fieldParts[0] + "_key" + tail;
@@ -2579,6 +2573,36 @@ public class ProductAmz {
             String newUrl = vpsFolderPath + vpsName;
             fieldImage.set(this, newUrl);
             DataStore.putProductData(item_sku, fieldName, newUrl);
+        } catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchFieldException ex) {
+//            Logger.getLogger(ProductAmz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void updateImageUrlImgUr(String fieldName) {
+        String[] fieldParts = fieldName.split(Pattern.quote("_url"));
+        String tail = fieldParts.length > 1 ? fieldParts[1] : "";
+        String keyFieldName = fieldParts[0] + "_key" + tail;
+        String vpsFieldName = fieldParts[0] +"_vps_name" + tail;
+        Class aClass = ProductAmz.class;
+
+        try {
+            Field fieldImage = aClass.getField(fieldName);
+            Field fieldKey = aClass.getField(keyFieldName);
+            Field fieldVps = aClass.getField(vpsFieldName);
+            Object url = fieldImage.get(this);
+            if (url == null || String.valueOf(url).isEmpty()) {
+                return;
+            }
+            String key = "" + Math.abs(url.hashCode());
+            fieldKey.set(this, key);
+            
+            String vpsName = DownloadManager.getInstance().getFileName(key);
+            if (StringUtils.isEmpty(vpsName)) {
+                DownloadManager.getInstance().put(key, String.valueOf(url));
+                vpsName = key + ".jpg";
+                fieldVps.set(this, vpsName);
+                DownloadManager.getInstance().putMapFileName(key, vpsName);
+            }
         } catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchFieldException ex) {
 //            Logger.getLogger(ProductAmz.class.getName()).log(Level.SEVERE, null, ex);
         }

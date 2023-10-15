@@ -36,7 +36,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
  *
  * @author Admin
  */
-public class ClientHomePanel extends BasePanel {
+public class VPSPanel extends BasePanel {
 
     JFrame topFrame;
     JFileChooser chooser;
@@ -44,7 +44,7 @@ public class ClientHomePanel extends BasePanel {
     JPanel controls;
 
 //    ProcessPannel processPannel;
-    public ClientHomePanel() {
+    public VPSPanel() {
         initComponents();
         setTitle("DropshipToolsConvertImage");
         setMenuActionCommand("MainHome");
@@ -242,11 +242,11 @@ public class ClientHomePanel extends BasePanel {
         
         String path = txtFilePath.getText();
         try {
-            TransformImageUtil.transformImageInProduct(path);
+            TransformImageUtil.transformImageInProductVPS(path);
         } catch (IOException ex) {
-            Logger.getLogger(ClientHomePanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(VPSPanel.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidFormatException ex) {
-            Logger.getLogger(ClientHomePanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(VPSPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnStartCrawlActionPerformed
 
@@ -340,7 +340,7 @@ public class ClientHomePanel extends BasePanel {
             Configs.changeVpsIpConfig(vpsIp);
             txtVpsIp.setText(vpsIp);
         } catch (IOException ex) {
-            Logger.getLogger(ClientHomePanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(VPSPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnBrowseProfile1ActionPerformed
 

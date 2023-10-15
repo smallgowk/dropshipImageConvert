@@ -157,7 +157,7 @@ public class ExcelUtils {
 //                }
                 
                 if (vpsImageFolder != null) {
-                    productAmz.updateImageUrl(vpsImageFolder);
+                    productAmz.updateImageUrlVps(vpsImageFolder);
                     DownloadManager.getInstance().downloadImageAndUpdate(productAmz, localImageFolder);
                 }
                 Row row = sheet.createRow(rowNum++);

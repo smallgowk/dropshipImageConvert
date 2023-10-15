@@ -24,5 +24,8 @@ public class KeyConfigs {
     public static final String STORE_FILE_PATH = "storeFilePath";
     public static final String FILE_PATH = "FILE_PATH";
     public static final String VPS_IP = "vpsIp";
+    public static final String IMGUR_REFRESH_TOEN = "refresh_toen";
+    public static final String IMGUR_CLIENT_ID = "client_id";
+    public static final String IMGUR_CLIENT_SECRET = "client_secret";
     public static final String MAX_ROW = "maxRow";
 }

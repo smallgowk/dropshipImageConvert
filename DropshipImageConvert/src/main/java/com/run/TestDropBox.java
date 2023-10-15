@@ -5,21 +5,41 @@
  */
 package com.run;
 
+import static com.config.Configs.CONFIG_FOLDER_PATH;
 import com.google.common.base.CharMatcher;
-import com.utils.ComputerIdentifier;
+import com.controller.crawl.aliex.AliexCrawlSvs;
+import com.dropbox.core.DbxRequestConfig;
+import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.filerequests.FileRequest;
+import com.dropbox.core.v2.files.DbxUserListFolderBuilder;
+import com.dropbox.core.v2.files.ListFolderResult;
+import com.dropbox.core.v2.files.Metadata;
+import com.dropbox.core.v2.files.SearchMatchV2;
+import com.dropbox.core.v2.files.SearchV2Result;
+import com.dropbox.core.v2.files.SharedLink;
+import com.dropbox.core.v2.sharing.CreateSharedLinkWithSettingsErrorException;
+import com.dropbox.core.v2.sharing.ListSharedLinksBuilder;
+import com.dropbox.core.v2.sharing.ListSharedLinksResult;
+import com.dropbox.core.v2.sharing.RequestedLinkAccessLevel;
+import com.dropbox.core.v2.sharing.SharedFolderMetadata;
+import com.dropbox.core.v2.sharing.SharedLinkMetadata;
+import com.dropbox.core.v2.sharing.SharedLinkSettings;
+import com.dropbox.core.v2.users.FullAccount;
+import com.utils.AWSUtil;
+import static com.utils.AWSUtil.BRAND_NAME_FILE;
+import static com.utils.AWSUtil.addForWithKeyIndex;
+import static com.utils.AWSUtil.removeWithKeyIndex;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-import java.net.CookieStore;
-import java.net.HttpCookie;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Set;
+import java.util.regex.Pattern;
 import javax.mail.Address;
 import javax.mail.BodyPart;
 import javax.mail.Flags;
@@ -31,12 +51,16 @@ import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
+import org.jsoup.nodes.Document;
+import static com.utils.AWSUtil.getListKeywordIndex;
+import com.utils.PhantomJsManager;
+import java.net.URI;
 
 /**
  *
  * @author Admin
  */
-public class TestPong {
+public class TestDropBox {
 
     private static final RuntimeException NOT_VALID_EAN_EXCEPTION = new RuntimeException("NOT VALID EAN CODE");
 
@@ -55,59 +79,158 @@ public class TestPong {
 
     static long apiTimeTotal = 0;
     static long crawlTimeTotal = 0;
-
-    private static final String SEARCH_TERM = "Tab";
-    private static final String ADDRESS_HOST = "https://www.aliexpress.com";
-    private static final String ADDRESS = "https://www.aliexpress.com/store/5616071/search?SearchText=Plate+Serving+Covers";
-    private static final CookieManager COOKIEMANAGER = new CookieManager();
-    private static Object myCookie;
+    
+    
+//    private static final String ACCESS_TOKEN = "sl.BnPK9u-4nhF2fI4cTR7P6MA6eX2zQ2-3GCKAMAN19FmFsOKtT263Fb1BvbUDgxDs2klj2ySer3kplwSUHSzRdDGGfBDKNxnibwYQKNSJPRdXsf_BDfasXw-HUsBETKsu4eJZx5FyrxgLzoc";
+//    private static final String ACCESS_TOKEN = "Bs0CTtclh1AAAAAAAAABY72ZMZ4zbACuzvbe9MsSnk3PM345f4pZQV28Q30yunDZ";
+    private static final String ACCESS_TOKEN = "65yg-2ZmB7AAAAAAAAjm99ewqVrpYRa6JlXr7fjx1NsvYBhmXP_XDPul7bs_lurk";
 
     public static void main(String[] str) throws Exception {
-//        getCookies(ADDRESS_HOST);
-//        System.out.println("=========");
-//        getCookies(ADDRESS);
+        
+        DbxRequestConfig config = DbxRequestConfig.newBuilder("Test").build();
+        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+//        ListSharedLinksResult listSharedLinksResult = client.sharing().listSharedLinks();
+        
+//        for (SharedLinkMetadata rs : listSharedLinksResult.getLinks()) {
+//            System.out.println("" + rs.getUrl());
+//        }
+        
+        
+//        client.fileRequests().
+        
+//        FullAccount account = client.users().getCurrentAccount();
+//        System.out.println(account.getName().getDisplayName());
 
-//        HashSet<String> set = new HashSet<>();
-//        set.add("a");
-//        set.add("a");
-//        System.out.println("" + set.size());
+//        Metadata metadata1 = client.files().getMetadata("/duy");
+//        System.out.println("" + metadata1.toStringMultiline());
+//        SharedFolderMetadata sharedFolderMetadata = client.sharing().getFolderMetadata("YECQeyGHDDAAAAAAAB4sMQ");
+//        System.out.println("" + sharedFolderMetadata.toStringMultiline());
 
-//        System.out.println("ComputerIdentifier: " + ComputerIdentifier.getDiskSerialNumber());
-    }
-    
-   
-    public static void getCookies(String urlLink) {
-        try {
-            COOKIEMANAGER.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-            CookieHandler.setDefault(COOKIEMANAGER);
-            URL url = new URL(urlLink);
-            URLConnection connection = url.openConnection();
-            connection.getContent();
-            CookieStore cookieStore = COOKIEMANAGER.getCookieStore();
-            Object[] cookieJar = cookieStore.getCookies().toArray();
-
-            for (HttpCookie httpCookie : cookieStore.getCookies()) {
-                System.out.println("" + httpCookie.getName() + " | " + httpCookie.getValue());
+        DbxUserListFolderBuilder builder = client.files().listFolderBuilder("");
+        builder.withSharedLink(new SharedLink("https://www.dropbox.com/scl/fo/1g22ql7a2ab7ltp8uqaqx/h?rlkey=rt0xur3121v9ltn8ymkj4c3ba&dl=0"));
+        ListFolderResult result = builder.start();
+        for (Metadata metadata : result.getEntries()) {
+            String path = metadata.getPathLower();
+            DbxUserListFolderBuilder builder2 = client.files().listFolderBuilder(path);
+            builder2.withLimit(1000L);
+            ListFolderResult result2 = builder2.start();
+            for (Metadata metadata2 : result2.getEntries()) {
+//                System.out.println(metadata2.toStringMultiline());
+                
+                try {
+                    SharedLinkSettings sharedLinkSettings = SharedLinkSettings.newBuilder()
+                            .withAllowDownload(true)
+                            .withAccess(RequestedLinkAccessLevel.MAX)
+                            .build();
+                    SharedLinkMetadata sharedLinkMetadata = client.sharing().createSharedLinkWithSettings(metadata2.getPathLower());
+                    System.out.println("" + sharedLinkMetadata.getUrl());
+                } catch (CreateSharedLinkWithSettingsErrorException ex) {
+                    System.out.println("" + ex.errorValue.getSharedLinkAlreadyExistsValue().getMetadataValue().getUrl());
+                }
+                
+//                listSharedLinksBuilder.withPath(metadata2.getPathLower());
+//                ListSharedLinksResult listSharedLinksResult = listSharedLinksBuilder.start();
+//                for (SharedLinkMetadata sharedLinkMetadata : listSharedLinksResult.getLinks()) {
+//                    if (sharedLinkMetadata.getPathLower().contains(".jpg")) {
+//                        System.out.println(sharedLinkMetadata.getUrl());
+//                    }
+//                }
             }
-
-//            for (int i = 0; i < cookieJar.length; ++i)
-//            {
-//                System.out.println(cookieJar[i]);
+            
+        }
+        
+//        
+//        while (true) {
+//            for (Metadata metadata : result.getEntries()) {
+//                System.out.println(metadata.getPathLower());
 //            }
-            //myCookie = checkForCookie(cookieJar);
-            //System.out.println(myCookie);
-        } catch (IOException ex) {
-            Logger.getLogger(TestPong.class.getName()).log(Level.SEVERE, null, ex);
+//
+//            if (!result.getHasMore()) {
+//                break;
+//            }
+//
+//            result = client.files().listFolderContinue(result.getCursor());
+//        }
+//            SearchV2Result result = client.files().searchV2("AEN56-SoccerShoes_231003");
+//            for (SearchMatchV2 rs : result.getMatches()) {
+//                System.out.println("" + rs.getMetadata().getMetadataValue().toStringMultiline());
+//            }
+                    
+        
+//        String url = "https://inkint.aliexpress.com/store/all-wholesale-products/1354144.html?spm=a2g0o.detail.1000061.2.71be2b27KaEbzD";
+//        URI uri = URI.create(url);
+//        System.out.println("" + uri.getPath());
+//        System.out.println("" + uri.getAuthority());
+//        System.out.println("" + uri.getFragment());
+//        System.out.println("" + uri.getHost());
+//        System.out.println("" + uri.getScheme());
+//        System.out.println("" + uri.getScheme() + "://" + uri.getHost() + uri.getPath());
+//        AWSUtil.init();
+//        String testStr = "Ipod, Iphone, Ipad... Wireless music transfer with all Bluetooth enabled mobile devices (iPhone / iPod / iPad / Smartphones etc.) \n" +
+//                "Iphone is the shit. And the same with (ipad). AndIpod is the shit too. Fuck ipod";
+//        String addForTest = AWSUtil.addForBrand(testStr);
+//        System.out.println(addForTest);
+
+
+//        String s1 = "I'm uno";
+//        String s2 = s1;
+//        s1 = "I'm uno 1";
+//        System.out.println(s1);
+//        System.out.println(s2);
+//        System.setProperty("phantomjs.binary.path", "libs/phantomjs.exe");
+//        Document document = PhantomJsManager.getInstance().renderPage("https://www.aliexpress.com/item/32670026662.html");
+//         System.out.println("2:" + document.html());
+//        String s = "I have an APPLE";
+//        String s1 = "Plate Serving Covers - Stainless Steel Cloche Food Cover Dome Dish Dining Dinner Domed Tray Metal Cat Set Kitchen Restaurant Tableware For Fruit Mirror Petkit Candle Porcelain Foldable Spoon Aqua Dog Bento Bowl Cake Pet Salt Shaker Korean";
+//        String s2 = "I have an APPLE in the table";
+//        String s3 = "I have an APPLEPINE in the table";
+//        
+//        String input = s1;
+//        String inputLower = input.toLowerCase();
+//        
+//        String keyword = "Korean".toLowerCase();
+//        
+//        ArrayList<Integer> listKeyIndex = getListKeywordIndex(inputLower, keyword);
+//            
+//        if(listKeyIndex == null) {
+//            System.out.println("Đéo có");
+//            return;
+//        }
+//        
+//        System.out.println("" + listKeyIndex.size());
+//        
+////        AWSUtil.processTrademarkAndBrandname(input);
+//            
+//        for(int size = listKeyIndex.size(), i = size - 1; i >= 0; i--) {
+//                input = removeWithKeyIndex(input, listKeyIndex.get(i), keyword.length());
+//                inputLower = removeWithKeyIndex(inputLower, listKeyIndex.get(i), keyword.length());
+//        }
+//        
+//        System.out.println("" + input);
+//        System.out.println("" + inputLower);
+    }
+
+    private static String toString(InputStream inputStream) throws IOException {
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"))) {
+            String inputLine;
+            StringBuilder stringBuilder = new StringBuilder();
+            while ((inputLine = bufferedReader.readLine()) != null) {
+                stringBuilder.append(inputLine);
+            }
+
+            return stringBuilder.toString();
         }
     }
 
-    private static Object checkForCookie(Object[] cookieJar) {
-        for (int i = 0; i < cookieJar.length; ++i) {
-            if (cookieJar[i].equals(SEARCH_TERM)) {
-                return cookieJar[i];
-            }
+    private static String getComputerName() {
+        Map<String, String> env = System.getenv();
+        if (env.containsKey("COMPUTERNAME")) {
+            return env.get("COMPUTERNAME");
+        } else if (env.containsKey("HOSTNAME")) {
+            return env.get("HOSTNAME");
+        } else {
+            return "Unknown Computer";
         }
-        return "Cookie not found";
     }
 
     private static boolean validate(String code) {
@@ -232,10 +355,6 @@ public class TestPong {
             }
         }
         return result;
-    }
-
-    public static void testCrawler() {
-
     }
 
     public static int countReload;

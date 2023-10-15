@@ -20,11 +20,12 @@ import com.utils.EncryptUtil;
 import com.utils.OSUtil;
 import com.view.AboutPannel;
 import com.view.BasePanel;
-import com.view.ClientHomePanel;
+import com.view.VPSPanel;
 import com.utils.CheckingDataUtil;
 import com.utils.ComputerIdentifier;
 import com.utils.PhantomJsManager;
 import com.utils.StringUtils;
+import com.view.ImgUrPanel;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -137,7 +138,8 @@ public class StartClientApp {
 //        AliexParameterFactory.initClientId("");
         OSUtil.setAppTitle(jFrame);
 
-        ClientHomePanel mainHomePanel = new ClientHomePanel();
+//        VPSPanel mainHomePanel = new VPSPanel();
+        ImgUrPanel mainHomePanel = new ImgUrPanel();
         AboutPannel aboutPannel = new AboutPannel();
 
         listPanel.add(mainHomePanel);

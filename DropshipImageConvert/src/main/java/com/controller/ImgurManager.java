@@ -5,6 +5,7 @@
  */
 package com.controller;
 
+import com.google.gson.Gson;
 import com.models.amazon.ProductAmz;
 import com.interfaces.DownloadListener;
 import com.utils.StringUtils;
@@ -19,17 +20,21 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  *
  * @author PhanDuy
  */
-public class DownloadManager {
-    ExecutorService executor = Executors.newFixedThreadPool(10);
-    private static DownloadManager serviceManager;
-    public HashMap<String, String> mapUrl = new HashMap<>();
+public class ImgurManager {
+    ExecutorService executor = Executors.newFixedThreadPool(1);
+    private static ImgurManager serviceManager;
+    HashMap<String, String> mapUrl = new HashMap<>();
     HashMap<String, String> mapKeyFileName = new HashMap<>();
     HashSet<String> setKey = new HashSet<>();
     HashSet<String> setKeyDone = new HashSet<>();
@@ -39,9 +44,9 @@ public class DownloadManager {
     
     public DownloadListener downloadListener;
     
-    public static DownloadManager getInstance() {
+    public static ImgurManager getInstance() {
         if (serviceManager == null) {
-            serviceManager = new DownloadManager();
+            serviceManager = new ImgurManager();
         }
         return serviceManager;
     }
@@ -102,7 +107,7 @@ public class DownloadManager {
             return;
         }
         if (!setKey.contains(key)) {
-            execute(new DownloadMachine(key, get(key), target, downloadListener));
+            execute(new ImgUrMachine(key, get(key), target, downloadListener));
             updateDownloadKey(key);
         } else {
             totalDownloadCount++;
@@ -133,14 +138,14 @@ public class DownloadManager {
 }
 
 
-class DownloadMachine extends Thread{
+class ImgUrMachine extends Thread {
     
     private final String imageUrl;
     private final String targetFilePath;
     private final String key;
     private final DownloadListener downloadListener;
     
-    public DownloadMachine(String key, String imageUrl, String targetFilePath, DownloadListener downloadListener) {
+    public ImgUrMachine(String key, String imageUrl, String targetFilePath, DownloadListener downloadListener) {
         this.key = key;
         this.imageUrl = imageUrl;
         this.targetFilePath = targetFilePath;
@@ -152,16 +157,39 @@ class DownloadMachine extends Thread{
         InputStream in = null;
         try {
 //            System.out.println("" + imageUrl);
-            in = new URL(imageUrl).openStream();
-            Files.copy(in, Paths.get(targetFilePath), StandardCopyOption.REPLACE_EXISTING);
-            DownloadManager.getInstance().updateCompleteKey(key);
+            
+            OkHttpClient client = new OkHttpClient().newBuilder()
+                    .build();
+            MediaType mediaType = MediaType.parse("text/plain");
+            RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                    .addFormDataPart("image", imageUrl)
+                    .addFormDataPart("type", "url")
+//                    .addFormDataPart("name", key + ".jpg")
+                    .build();
+            Request request = new Request.Builder()
+                    .url("https://api.imgur.com/3/image")
+                    .method("POST", body)
+                    .addHeader("Authorization", "Client-ID d85a4c4f0d83090")
+                    .build();
+            Response response = client.newCall(request).execute();
+            if (response.isSuccessful()) {
+                Gson gson = new Gson();
+                ImgUrResponse imgUrResponse = gson.fromJson(response.body().string(), ImgUrResponse.class);
+//            System.out.println("" + response.body().string());
+                System.out.println("Convert: " + imageUrl + " ===> " + imgUrResponse.data.link);
+            } else {
+                System.out.println("Convert fail: " + imageUrl + "\n" + response.toString());
+            }
+            
+            
+//            in = new URL(imageUrl).openStream();
+//            Files.copy(in, Paths.get(targetFilePath), StandardCopyOption.REPLACE_EXISTING);
+            ImgurManager.getInstance().updateCompleteKey(key);
             if (downloadListener != null) {
                 downloadListener.onComplete(key);
             }
         } catch (MalformedURLException ex) {
-//            System.out.println(imageUrl + " 1: \n" + ex.getMessage());
         } catch (IOException ex) {
-//            System.out.println(imageUrl + " 2: \n" + ex.getMessage());
         } finally {
             if (in != null) {
                 try {
@@ -171,4 +199,12 @@ class DownloadMachine extends Thread{
             }
         }
     }
+}
+
+class ImgUrResponse {
+    public ImgUrData data;
+}
+
+class ImgUrData {
+    public String link;
 }

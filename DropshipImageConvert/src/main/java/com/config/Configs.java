@@ -90,6 +90,10 @@ public class Configs {
 //    public static String storeFilePath;
     public static String filePath;
     public static String vpsIp;
+    
+    public static String imgurRefreshToken;
+    public static String imgurClientId;
+    public static String imgurClientSecret;
 //    public static int maxRow;
 //    public static String apiKeys;
 //    public static String merchantUser;
@@ -356,6 +360,9 @@ public class Configs {
 //            storeFilePath = cnfParamsTmp.getProperty(KeyConfigs.STORE_FILE_PATH, "");
             filePath = cnfParamsTmp.getProperty(KeyConfigs.FILE_PATH, "");
             vpsIp = cnfParamsTmp.getProperty(KeyConfigs.VPS_IP, "");
+            imgurRefreshToken = cnfParamsTmp.getProperty(KeyConfigs.IMGUR_REFRESH_TOEN, "b8e5c5b1efb991aabb10a36694320a19c73bc990");
+            imgurClientId = cnfParamsTmp.getProperty(KeyConfigs.IMGUR_CLIENT_ID, "d009eeb0c0f6b6e");
+            imgurClientSecret = cnfParamsTmp.getProperty(KeyConfigs.IMGUR_CLIENT_SECRET, "21ea11c145a6d985c091e5b57b21fdee9b894a7b");
 //            String maxRowStr = cnfParamsTmp.getProperty(KeyConfigs.MAX_ROW, "");
             
 //            createProductFolders();
@@ -665,6 +672,21 @@ public class Configs {
     public static void changeVpsIpConfig(String ip) throws FileNotFoundException, IOException {
         changeNullableConfigValues(CONTENT_CONFIG_FILE, new String[]{KeyConfigs.VPS_IP, ip});
         vpsIp = ip;
+    }
+    
+    public static void changeRefreshToken(String token) throws FileNotFoundException, IOException {
+        changeNullableConfigValues(CONTENT_CONFIG_FILE, new String[]{KeyConfigs.IMGUR_REFRESH_TOEN, token});
+        imgurRefreshToken = token;
+    }
+    
+    public static void changeClientId(String clientId) throws FileNotFoundException, IOException {
+        changeNullableConfigValues(CONTENT_CONFIG_FILE, new String[]{KeyConfigs.IMGUR_CLIENT_ID, clientId});
+        imgurClientId = clientId;
+    }
+    
+    public static void changeClientSecret(String clientSecret) throws FileNotFoundException, IOException {
+        changeNullableConfigValues(CONTENT_CONFIG_FILE, new String[]{KeyConfigs.IMGUR_CLIENT_SECRET, clientSecret});
+        imgurClientSecret = clientSecret;
     }
 
 //    public static void changeExcelSamplePathConfig(String path) throws FileNotFoundException, IOException {

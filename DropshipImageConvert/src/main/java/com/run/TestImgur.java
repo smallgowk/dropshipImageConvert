@@ -5,9 +5,30 @@
  */
 package com.run;
 
+import com.api.ImgurApi;
 import static com.config.Configs.CONFIG_FOLDER_PATH;
+import static com.config.Configs.filePath;
 import com.google.common.base.CharMatcher;
 import com.controller.crawl.aliex.AliexCrawlSvs;
+import com.controller.imgur.ImgurUtils;
+import com.dropbox.core.DbxRequestConfig;
+import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.filerequests.FileRequest;
+import com.dropbox.core.v2.files.DbxUserListFolderBuilder;
+import com.dropbox.core.v2.files.ListFolderResult;
+import com.dropbox.core.v2.files.Metadata;
+import com.dropbox.core.v2.files.SearchMatchV2;
+import com.dropbox.core.v2.files.SearchV2Result;
+import com.dropbox.core.v2.files.SharedLink;
+import com.dropbox.core.v2.sharing.CreateSharedLinkWithSettingsErrorException;
+import com.dropbox.core.v2.sharing.ListSharedLinksBuilder;
+import com.dropbox.core.v2.sharing.ListSharedLinksResult;
+import com.dropbox.core.v2.sharing.RequestedLinkAccessLevel;
+import com.dropbox.core.v2.sharing.SharedFolderMetadata;
+import com.dropbox.core.v2.sharing.SharedLinkMetadata;
+import com.dropbox.core.v2.sharing.SharedLinkSettings;
+import com.dropbox.core.v2.users.FullAccount;
+import com.models.imgur.Album;
 import com.utils.AWSUtil;
 import static com.utils.AWSUtil.BRAND_NAME_FILE;
 import static com.utils.AWSUtil.addForWithKeyIndex;
@@ -37,13 +58,25 @@ import javax.mail.search.FlagTerm;
 import org.jsoup.nodes.Document;
 import static com.utils.AWSUtil.getListKeywordIndex;
 import com.utils.PhantomJsManager;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.net.URI;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import javax.imageio.ImageIO;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
  * @author Admin
  */
-public class Test {
+public class TestImgur {
 
     private static final RuntimeException NOT_VALID_EAN_EXCEPTION = new RuntimeException("NOT VALID EAN CODE");
 
@@ -62,60 +95,50 @@ public class Test {
 
     static long apiTimeTotal = 0;
     static long crawlTimeTotal = 0;
+    
+
 
     public static void main(String[] str) throws Exception {
-        String url = "https://inkint.aliexpress.com/store/all-wholesale-products/1354144.html?spm=a2g0o.detail.1000061.2.71be2b27KaEbzD";
-        URI uri = URI.create(url);
-        System.out.println("" + uri.getPath());
-        System.out.println("" + uri.getAuthority());
-        System.out.println("" + uri.getFragment());
-        System.out.println("" + uri.getHost());
-        System.out.println("" + uri.getScheme());
-        System.out.println("" + uri.getScheme() + "://" + uri.getHost() + uri.getPath());
-//        AWSUtil.init();
-//        String testStr = "Ipod, Iphone, Ipad... Wireless music transfer with all Bluetooth enabled mobile devices (iPhone / iPod / iPad / Smartphones etc.) \n" +
-//                "Iphone is the shit. And the same with (ipad). AndIpod is the shit too. Fuck ipod";
-//        String addForTest = AWSUtil.addForBrand(testStr);
-//        System.out.println(addForTest);
-
-
-//        String s1 = "I'm uno";
-//        String s2 = s1;
-//        s1 = "I'm uno 1";
-//        System.out.println(s1);
-//        System.out.println(s2);
-//        System.setProperty("phantomjs.binary.path", "libs/phantomjs.exe");
-//        Document document = PhantomJsManager.getInstance().renderPage("https://www.aliexpress.com/item/32670026662.html");
-//         System.out.println("2:" + document.html());
-//        String s = "I have an APPLE";
-//        String s1 = "Plate Serving Covers - Stainless Steel Cloche Food Cover Dome Dish Dining Dinner Domed Tray Metal Cat Set Kitchen Restaurant Tableware For Fruit Mirror Petkit Candle Porcelain Foldable Spoon Aqua Dog Bento Bowl Cake Pet Salt Shaker Korean";
-//        String s2 = "I have an APPLE in the table";
-//        String s3 = "I have an APPLEPINE in the table";
-//        
-//        String input = s1;
-//        String inputLower = input.toLowerCase();
-//        
-//        String keyword = "Korean".toLowerCase();
-//        
-//        ArrayList<Integer> listKeyIndex = getListKeywordIndex(inputLower, keyword);
-//            
-//        if(listKeyIndex == null) {
-//            System.out.println("Đéo có");
-//            return;
-//        }
-//        
-//        System.out.println("" + listKeyIndex.size());
-//        
-////        AWSUtil.processTrademarkAndBrandname(input);
-//            
-//        for(int size = listKeyIndex.size(), i = size - 1; i >= 0; i--) {
-//                input = removeWithKeyIndex(input, listKeyIndex.get(i), keyword.length());
-//                inputLower = removeWithKeyIndex(inputLower, listKeyIndex.get(i), keyword.length());
-//        }
-//        
-//        System.out.println("" + input);
-//        System.out.println("" + inputLower);
+        long start = System.currentTimeMillis();
+//        byte[] fileContent = FileUtils.readFileToByteArray(new File("C:\\Users\\PhanDuy\\Desktop\\Test\\DataNeedChangeUrl_TestTool\\26227557.jpg"));
+//        String encodedString = Base64.getEncoder().encodeToString(fileContent);
+//        System.out.println("");
+        
+//     BufferedImage sourceimage = ImageIO.read(new File("C:\\Users\\PhanDuy\\Desktop\\Test\\DataNeedChangeUrl_TestTool\\26227557.jpg"));
+//     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//     ImageIO.write(sourceimage, "png", bytes);
+//     String resultantimage = Base64.encode(bytes.toByteArray());
+////     System.out.println(resultantimage);
+//
+//        OkHttpClient client = new OkHttpClient().newBuilder()
+//                .build();
+//        MediaType mediaType = MediaType.parse("text/plain");
+//        RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+////                .addFormDataPart("image", "https://ae01.alicdn.com/kf/S6850a865fc464e9d8ff8253ab2588458m/Women-s-Basketball-Shoes-Fashion-Sports-Shoes-Hot-Couple-Shoes-Cushioning-Breathable-Street-Basketball-Training-Boots.jpg")
+//                .addFormDataPart("image", resultantimage)
+////                .addFormDataPart("type", "url")
+////                .addFormDataPart("name", "test.jpg")
+//                .build();
+//        Request request = new Request.Builder()
+//                .url("https://api.imgur.com/3/image")
+//                .method("POST", body)
+//                .addHeader("Authorization", "Client-ID ce619cb16ca344c")
+//                .build();
+//        Response response = client.newCall(request).execute();
+//        System.out.println("" + response.body().string());
+//        System.out.println("" + (System.currentTimeMillis() - start));
+        ImgurApi.generateToken();
+        ArrayList<Album> listAlbums = ImgurApi.getAllAlbums();
+        String albumName = "TestAlbum";
+        if (ImgurUtils.findAlbum(listAlbums, albumName) == null) {
+            ImgurApi.createAlbum(albumName);
+            System.out.println("Created album " + albumName);
+        } else {
+            System.out.println("Existed album!");
+        }
     }
+    
+    
 
     private static String toString(InputStream inputStream) throws IOException {
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"))) {
