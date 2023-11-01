@@ -2599,7 +2599,13 @@ public class ProductAmz {
             String vpsName = DownloadManager.getInstance().getFileName(key);
             if (StringUtils.isEmpty(vpsName)) {
                 DownloadManager.getInstance().put(key, String.valueOf(url));
-                vpsName = key + ".jpg";
+                String extension = null;
+                if (String.valueOf(url).endsWith(".png")) {
+                    extension = ".png";
+                } else {
+                    extension = ".jpg";
+                }
+                vpsName = key + extension;
                 fieldVps.set(this, vpsName);
                 DownloadManager.getInstance().putMapFileName(key, vpsName);
             }

@@ -12,7 +12,7 @@ package com.utils;
 public class AppUtil {
 
 //    private static String lastestAppVersion = "20200412";
-    private static String appVersion = "20230927.2100";
+    private static String appVersion = "20231028.1525";
 //    private static String appVersion = "20220314.1720";
 //    private static String appVersion = "20220312.0800";
 //    private static String appVersion;

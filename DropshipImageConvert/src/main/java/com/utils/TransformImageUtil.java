@@ -16,13 +16,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import org.apache.commons.io.FileUtils;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -151,6 +154,7 @@ public class TransformImageUtil {
     }
     
     public static void downloadImagesInProduct(String filePath, String localImageFolder,String name, String parentFolder) throws FileNotFoundException, IOException, InvalidFormatException {
+        DownloadManager.getInstance().clearData();
         FileInputStream fis = new FileInputStream(filePath);
         try (Workbook workbook = WorkbookFactory.create(fis)) {
             CreationHelper createHelper = workbook.getCreationHelper();
@@ -219,6 +223,7 @@ public class TransformImageUtil {
         
         String localImageFolder = file.getPath() + "/";
         HashMap<String, String> imageMap = convertListImgUrs(listImages);
+        HashSet<String> listFailImages = new HashSet<>();
         FileInputStream fis = new FileInputStream(filePath);
         try (Workbook workbook = WorkbookFactory.create(fis)) {
             CreationHelper createHelper = workbook.getCreationHelper();
@@ -262,6 +267,16 @@ public class TransformImageUtil {
                                 String key = "" + Math.abs(value.hashCode());
                                 if (imageMap.containsKey(key)) {
                                     cell.setCellValue(imageMap.get(key));
+                                } else {
+                                    String extension = null;
+                                    if (value.endsWith(".png")) {
+                                        extension = ".png";
+                                    } else if (value.endsWith(".jpg")) {
+                                        extension = ".jpg";
+                                    }
+                                    if (extension != null) {
+                                        listFailImages.add(key + extension);
+                                    }
                                 }
                             }
                         }
@@ -293,7 +308,7 @@ public class TransformImageUtil {
                 } catch (IOException ex) {
                     Logger.getLogger(ExcelUtils.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+                saveNotFoundImages(listFailImages, localImageFolder, parent, name + "_error_upload");
             }
         }
     }
@@ -304,6 +319,23 @@ public class TransformImageUtil {
             result.put(imgUrImage.name, imgUrImage.link);
         }
         return result;
+    }
+    
+    public static void saveNotFoundImages(HashSet<String> listImages, String originImageFolder, String parentFolder, String folderName) throws IOException {
+        if (listImages == null || listImages.isEmpty()) return;
+        File folder = new File(parentFolder + Configs.pathChar + folderName);
+        if (!folder.exists()) {
+            folder.mkdir();
+        } else {
+            FileUtils.cleanDirectory(folder);
+        }
+        for (String image : listImages) {
+            File origin = new File(originImageFolder + image);
+            if (origin.exists()) {
+                File newFile = new File(folder.getPath() + Configs.pathChar + image);
+                Files.copy(origin.toPath(), newFile.toPath());
+            }
+        }
     }
     
     public static void saveLinkDownload(HashMap<String, String> mapUrl, String fileName) {
